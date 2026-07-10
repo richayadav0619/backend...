@@ -1,42 +1,31 @@
-import mongoose from "mongoose";
-import { Comment } from "../models/comment.model.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import mongoose from "mongoose"
+import {Comment} from "../models/comment.model.js"
+import {ApiError} from "../utils/ApiError.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
+import {asyncHandler} from "../utils/asyncHandler.js"
 
-const createComment = asyncHandler(async (req, res) => {
+const getVideoComments = asyncHandler(async (req, res) => {
+    //TODO: get all comments for a video
+    const {videoId} = req.params
+    const {page = 1, limit = 10} = req.query
 
-    const { content } = req.body;
+})
 
-    const { videoId } = req.params;
+const addComment = asyncHandler(async (req, res) => {
+    // TODO: add a comment to a video
+})
 
-    if (!content || content.trim() === "") {
-        throw new ApiError(400, "Comment content is required");
+const updateComment = asyncHandler(async (req, res) => {
+    // TODO: update a comment
+})
+
+const deleteComment = asyncHandler(async (req, res) => {
+    // TODO: delete a comment
+})
+
+export {
+    getVideoComments, 
+    addComment, 
+    updateComment,
+     deleteComment
     }
-
-    if (!mongoose.Types.ObjectId.isValid(videoId)) {
-        throw new ApiError(400, "Invalid video id");
-    }
-
-    const comment = await Comment.create({
-        content,
-        video: videoId,
-        owner: req.user._id
-    });
-
-    if (!comment) {
-        throw new ApiError(500, "Failed to create comment");
-    }
-
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(
-                201,
-                comment,
-                "Comment created successfully"
-            )
-        );
-});
-
-export { createComment };
